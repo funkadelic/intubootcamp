@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+
     grunt.initConfig({
         webServer: {
             rootFolder: "www",
@@ -6,23 +7,17 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask("default", "start a web server", function() {
-
-        var http = require("http"),
-            express = require("express"),
-            app = express(),
+    grunt.registerTask("default", "start a web server", function(port) {
+        var webserver = require("./webserver"),
             webServerConfig = grunt.config("webServer");
 
         this.async();
 
-        app.use(express.static(webServerConfig.rootFolder));
+        webServerConfig.port = port || webServerConfig.port;
 
-        http.createServer(app).listen(webServerConfig.port, function() {
+        webserver(webServerConfig, function() {
             grunt.log.writeln("web server listening on port " + webServerConfig.port);
         });
-
-
-
 
     });
 
